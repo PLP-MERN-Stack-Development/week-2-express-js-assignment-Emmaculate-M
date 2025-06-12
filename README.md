@@ -1,63 +1,220 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19755952&assignment_repo_type=AssignmentRepo)
-# Express.js RESTful API Assignment
+# Express Products API
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+A simple RESTful API for managing products using Express.js.
 
-## Assignment Overview
+## 📁 Project Structure
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
-
+```
+express-api-products/
+│
+├── controllers/
+│   └── productController.js
+├── data/
+│   └── products.js
+├── middleware/
+│   ├── auth.js
+│   ├── errorHandler.js
+│   ├── logger.js
+│   ├── validateProduct.js    
+├── routes/
+│   └── products.js
+├── utils/
+│   └── error.js
+├── .env.example
+├── README.md
+└── server.js
+```  
 ## Getting Started
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+### 1. Clone the repository
 
-## Files Included
+```bash
+git clone https://github.com/PLP-MERN-Stack-Development/week-2-express-js-assignment-Emmaculate-M.git
+cd week-2-express-js-assignment-Emmaculate-M
+```
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+### 2. Install dependencies
 
-## Requirements
+```bash
+npm install express body-parser uuid dotenv
+```
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+### 3. Setup environment variables
 
-## API Endpoints
+Create a `.env` file and configure it using `.env.example`:
 
-The API will have the following endpoints:
+```bash
+copy .env.example .env
+```
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+### 4. Run the server
 
-## Submission
+```bash
+npm start
+```
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+Server running at http://localhost:3000
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+##  API Endpoints
 
-## Resources
+### Base URL: `/api/products`
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+#### GET /api/products
+Description: Get all products
+Query Parameters:
+    category (optional) – filter PRoducts by category
+Example Request:
+GET http://localhost:3000/api/products
+Response:
+{
+    "page": 1,
+    "limit": 10,
+    "total": 6,
+    "products": [
+        {
+            "id": "1",
+            "name": "Laptop",
+            "description": "High-performance laptop with 16GB RAM",
+            "price": 1200,
+            "category": "electronics",
+            "inStock": true
+        },
+        {
+            "id": "2",
+            "name": "Smartphone",
+            "description": "Latest model with 128GB storage",
+            "price": 800,
+            "category": "electronics",
+            "inStock": true
+        },
+        {
+            "id": "3",
+            "name": "Coffee Maker",
+            "description": "Programmable coffee maker with timer",
+            "price": 50,
+            "category": "kitchen",
+            "inStock": false
+        },
+        {
+            "id": "4",
+            "name": "Tesla Model X",
+            "description": "Electric luxury SUV",
+            "price": 85000,
+            "category": "automotive",
+            "inStock": true
+        },
+        {
+            "id": "5",
+            "name": "Jaguar XF",
+            "description": "Luxury sedan",
+            "price": 55000,
+            "category": "automotive",
+            "inStock": true
+        },
+        {
+            "id": "6",
+            "name": "Land Rover Discovery",
+            "description": "Premium off-road SUV",
+            "price": 60000,
+            "category": "automotive",
+            "inStock": false
+        }
+    ]
+}
+
+#### GET /api/products/:id
+Description: Get product by ID
+Example Request:
+GET http://localhost:3000/api/products/1
+Response:
+{
+    "id": "1",
+    "name": "Laptop",
+    "description": "High-performance laptop with 16GB RAM",
+    "price": 1200,
+    "category": "electronics",
+    "inStock": true
+}
+
+#### POST /api/products
+Description: Create new product
+Example Request: POST http://localhost:3000/api/products
+Body: JSON
+{
+  "name": "Jaguar F-Pace",
+  "description": "Luxury performance SUV",
+  "price": 85000,
+  "category": "automotive",
+  "inStock": true
+}
+Response:
+{
+    "id": "03685455-d367-4897-a0db-653fb6c76d0c",
+    "name": "Jaguar F-Pace",
+    "description": "Luxury performance SUV",
+    "price": 85000,
+    "category": "automotive",
+    "inStock": true
+}
+
+#### PUT /api/products/:id
+Description: Update a product
+Request: PUT http://localhost:3000/api/products/4
+Body: JSON
+{
+  "name": "Jaguar F-Pace",
+  "description": "Luxury performance SUV",
+  "price": 85000,
+  "category": "automotive",
+  "inStock": true
+}
+Response: 
+{
+    "id": "4",
+    "name": "Jaguar F-Pace",
+    "description": "Luxury performance SUV",
+    "price": 85000,
+    "category": "automotive",
+    "inStock": true
+}
+
+#### DELETE /api/products/:id 
+Description: Delete a product
+Example Request: DELETE http://localhost:3000/api/products/3
+
+Response: 
+{
+    "message": "Product deleted",
+    "deleted": {
+        "id": "3",
+        "name": "Coffee Maker",
+        "description": "Programmable coffee maker with timer",
+        "price": 50,
+        "category": "kitchen",
+        "inStock": false
+    }
+}
+
+#### GET /api/products/stats 
+Description: View count of products by category
+Example Request: GET http://localhost:3000/api/products/stats
+Response:
+{
+    "totalProducts": 6,
+    "countByCategory": {
+        "electronics": 2,
+        "automotive": 4
+    }
+}
+
+## Testing
+
+Used Postman
+
+## License
+
+MIT
+
+## Author
+
+Emmaculate Mwania
